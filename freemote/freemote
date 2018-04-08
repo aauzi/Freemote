@@ -1476,7 +1476,7 @@ class RemoteApp(Gtk.Application):
         if repeat > 1:
             repeat_str="&repeat=%d"%(repeat)
 
-        url = "http://%s/pub/remote_control?code='%s'&key='%s'%s%s"%(target, code,
+        url = "http://%s/pub/remote_control?code=%s&key=%s%s%s"%(target, code,
                                                                      key,
                                                                      long_str,
                                                                      repeat_str)

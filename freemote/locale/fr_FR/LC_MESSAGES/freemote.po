@@ -1,0 +1,111 @@
+# French translations for freemote package
+# Traductions françaises du paquet freemote.
+# This file is put in the public domain.
+# André Auzi <aauzi@free.fr>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: freemote 0.1\n"
+"Report-Msgid-Bugs-To: aauzi@free.fr\n"
+"POT-Creation-Date: 2018-04-04 18:24+0200\n"
+"PO-Revision-Date: 2018-04-03 11:25+0200\n"
+"Last-Translator: André Auzi <aauzi@free.fr>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: freemote/freemote:115
+msgid "A Freebox remote control"
+msgstr "Une télécommande Freebox"
+
+#: freemote/freemote:126
+msgid "HD/Cristal"
+msgstr ""
+
+#: freemote/freemote:126
+msgid "Revolution"
+msgstr "Révolution"
+
+#: freemote/freemote:242
+msgid "_Settings"
+msgstr "_Préférences"
+
+#: freemote/freemote:243
+msgid "_About"
+msgstr "_A propos"
+
+#: freemote/freemote:244
+msgid "_Quit"
+msgstr "_Quitter"
+
+#: freemote/freemote:357
+msgid "Settings"
+msgstr "Préférences"
+
+#: freemote/freemote:358
+msgid "Freebox type"
+msgstr "Type de Freebox"
+
+#: freemote/freemote:359
+msgid "Freebox address"
+msgstr "Adresse de la Freebox"
+
+#: freemote/freemote:360 freemote/freemote:397
+msgid "Remote code"
+msgstr "Code de télécommande"
+
+#: freemote/freemote:361
+msgid "Start minimized"
+msgstr "Démarrer minimisée"
+
+#: freemote/freemote:372
+msgid "Add verbosity on standard error"
+msgstr "Augmenter la verbosité de la sortie d'erreur standard"
+
+#: freemote/freemote:377
+msgid "Disable outputs on standard error"
+msgstr "Désactiver les messages sur la sortie d'erreurs standard"
+
+#: freemote/freemote:382
+msgid "Start the application minimized in the status bar"
+msgstr "Démarrer l'application minimisée dans la barre d'état"
+
+#: freemote/freemote:387
+#, python-format
+msgid ""
+"Remote protocol\n"
+"\tAccording Freebox type (any of: %s)"
+msgstr ""
+"Protocole de télécommande\n"
+"\tSelon le type de Freebox (parmi: %s)"
+
+#: freemote/freemote:392
+msgid ""
+"Freebox address\n"
+"\tFormat: hd[n].freebox.fr where <n> is within [1..2]"
+msgstr ""
+"Adresse de la Freebox\n"
+"\tFormat: hd[n].freebox.fr où <n> est dans [1..2]"
+
+#: freemote/freemote:917
+msgid "<i>Remote code</i> is missing."
+msgstr "<i>Code de télécommande</i> manquant."
+
+#: freemote/freemote:918
+msgid "Please fill in <i>Remote code</i> in <b>Settings</b>."
+msgstr ""
+"Merci de renseigner le <i>Code de télécommande</i> dans les <b>Préférences</"
+"b>."
+
+#: freemote/freemote:928
+msgid "<i>Freebox address</i> is missing."
+msgstr "<i>Address de la Freebox</i> manquante."
+
+#: freemote/freemote:929
+msgid "Please fill in <i>Freebox address</i> in <b>Settings</b>."
+msgstr ""
+"Merci de renseigner l'<i>Adresse de la Freebox</i> dans les <b>Préférences</"
+"b>."

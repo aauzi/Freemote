@@ -1,0 +1,9 @@
+include *.txt *.rst
+recursive-include freemote *.py
+recursive-include freemote/resources *.png
+recursive-include freemote/locale *.mo
+prune __pycache__
+prune artwork
+prune build
+prune contribs
+prune dist

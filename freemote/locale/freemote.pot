@@ -1,0 +1,102 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: freemote 0.1\n"
+"Report-Msgid-Bugs-To: aauzi@free.fr\n"
+"POT-Creation-Date: 2018-04-04 18:24+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: freemote/freemote:115
+msgid "A Freebox remote control"
+msgstr ""
+
+#: freemote/freemote:126
+msgid "HD/Cristal"
+msgstr ""
+
+#: freemote/freemote:126
+msgid "Revolution"
+msgstr ""
+
+#: freemote/freemote:242
+msgid "_Settings"
+msgstr ""
+
+#: freemote/freemote:243
+msgid "_About"
+msgstr ""
+
+#: freemote/freemote:244
+msgid "_Quit"
+msgstr ""
+
+#: freemote/freemote:357
+msgid "Settings"
+msgstr ""
+
+#: freemote/freemote:358
+msgid "Freebox type"
+msgstr ""
+
+#: freemote/freemote:359
+msgid "Freebox address"
+msgstr ""
+
+#: freemote/freemote:360 freemote/freemote:397
+msgid "Remote code"
+msgstr ""
+
+#: freemote/freemote:361
+msgid "Start minimized"
+msgstr ""
+
+#: freemote/freemote:372
+msgid "Add verbosity on standard error"
+msgstr ""
+
+#: freemote/freemote:377
+msgid "Disable outputs on standard error"
+msgstr ""
+
+#: freemote/freemote:382
+msgid "Start the application minimized in the status bar"
+msgstr ""
+
+#: freemote/freemote:387
+#, python-format
+msgid ""
+"Remote protocol\n"
+"\tAccording Freebox type (any of: %s)"
+msgstr ""
+
+#: freemote/freemote:392
+msgid ""
+"Freebox address\n"
+"\tFormat: hd[n].freebox.fr where <n> is within [1..2]"
+msgstr ""
+
+#: freemote/freemote:917
+msgid "<i>Remote code</i> is missing."
+msgstr ""
+
+#: freemote/freemote:918
+msgid "Please fill in <i>Remote code</i> in <b>Settings</b>."
+msgstr ""
+
+#: freemote/freemote:928
+msgid "<i>Freebox address</i> is missing."
+msgstr ""
+
+#: freemote/freemote:929
+msgid "Please fill in <i>Freebox address</i> in <b>Settings</b>."
+msgstr ""

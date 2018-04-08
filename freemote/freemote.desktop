@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Freemote
+Comment=A Freebox remote control
+Comment[fr]=Une télécommande Freebox
+Exec=freemote
+Icon=freemote.png
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GTK;Utility;AudioVideo
+NoDisplay=false

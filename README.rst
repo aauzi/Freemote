@@ -1,9 +1,3 @@
-.. raw:: html
-
-    <style> .bold-red {color:red; font-weight: bold} </style>
-    <style> .done {text-decoration: line-through} </style>
-
-.. role:: bold_red
 .. role:: done
 
 Freemote
@@ -198,10 +192,10 @@ Futur
 
 0. corriger les bugs
 
-1. :done:`finaliser les scripts d'installation`
+1. :done:`finaliser les scripts d'installation` **done**
    
 2. :done:`permettre l'envoi de séquences de touches en ligne commande
-   pour de l'intégration domotique...`
+   pour de l'intégration domotique...` **done**
 
    ...cas d'usage similaire au `plugin Fibaro suivant`_.
 

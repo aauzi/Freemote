@@ -214,9 +214,11 @@ def keyval_name(event):
     The event.keyval is searched in the _KEYCODE_NAMES dictionnary.
     When the _KEYCODE_NAMES does not contain the searched keyval,
     the event.string is return."""
-    
+
     if event.keyval in _KEYCODE_NAMES.keys():
+        _info('keyval: %d -> %s'%(event.keyval, _KEYCODE_NAMES[event.keyval]))
         return _KEYCODE_NAMES[event.keyval]
+    _info('string: %s'%(event.string))
     return event.string
 
 ## :data _MENU_XML: application menu definition
@@ -1296,6 +1298,9 @@ class RemoteApp(Gtk.Application):
         window.add(grid)
 
         window.show_all()
+
+        window.connect('key-release-event', self.key_release_event)
+        window.connect('realize', self._grid_realize)
         
         self.icon_menu.attach_to_widget(window)
 
@@ -1392,9 +1397,6 @@ class RemoteApp(Gtk.Application):
         grid.set_halign(Gtk.Align.CENTER)
         grid.set_valign(Gtk.Align.CENTER)
         
-        grid.connect('key-release-event', self.key_release_event)
-        grid.connect('realize', self._grid_realize)
-
         return grid
 
     def _grid_realize(self, widget):

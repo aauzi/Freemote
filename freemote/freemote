@@ -1299,7 +1299,7 @@ class RemoteApp(Gtk.Application):
 
         window.show_all()
 
-        window.connect('key-release-event', self.key_release_event)
+        window.connect('key-press-event', self.key_press_event)
         window.connect('realize', self._grid_realize)
         
         self.icon_menu.attach_to_widget(window)
@@ -1400,11 +1400,11 @@ class RemoteApp(Gtk.Application):
         return grid
 
     def _grid_realize(self, widget):
-        widget.add_events(Gdk.EventMask.KEY_RELEASE_MASK)
+        widget.add_events(Gdk.EventMask.KEY_PRESS_MASK)
         return False
 
-    def key_release_event(self, widget, event):
-        """When a key is released,
+    def key_press_event(self, widget, event):
+        """When a key is pressed,
         
         the _KEYCODE_NAMES table and the application's keymap 
         dictionnnary are used to produce a remote control key 
@@ -1412,10 +1412,10 @@ class RemoteApp(Gtk.Application):
         
         name = keyval_name(event)
         if not name in self.keymap.keys():
-            _info("unknown key release: %d(%s)"%(event.keyval, event.string))
+            _info("unknown key press: %d(%s)"%(event.keyval, event.string))
             return False
         
-        _info("key release: %s"%(name))
+        _info("key press: %s"%(name))
         button = self.keymap[name]
         button.emit("activate")
         return True

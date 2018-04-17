@@ -924,6 +924,8 @@ class RemoteApp(Gtk.Application):
         self.config = None
         self.options = set()
 
+        self.key_press_state = dict()
+
         self._load_config()
 
     def do_startup(self):
@@ -1428,9 +1430,32 @@ class RemoteApp(Gtk.Application):
             _info("unknown key press: %d(%s)"%(event.keyval, event.string))
             return False
 
+        modifiers_state = Gdk.Keymap.get_default().get_modifier_state()
+
+        set_long = False
+        if modifiers_state & Gdk.ModifierType.CONTROL_MASK:
+            set_long = True
+
         _info("key press: %s"%(name))
         button = self.keymap[name]
+
+        if name in self.key_press_state.keys():
+            previous_set_long, repeat = self.key_press_state[name]
+
+            _info("repeat++")
+
+            if set_long != previous_set_long:
+                return
+
+            self.key_press_state[name] = (set_long, repeat + 1,)
+            return
+
+        self.key_press_state[name] = (set_long, 1,)
+
+        _info("%s.activate: now"%(name))
         button.emit("activate")
+        _info("%s.activate: done"%(name))
+
         return True
 
     def send_key_clicked(self, key):
@@ -1477,9 +1502,22 @@ class RemoteApp(Gtk.Application):
         if modifiers_state & Gdk.ModifierType.CONTROL_MASK:
             set_long = True
 
-        self.send_key(key, set_long)
+        repeat = 1
+        if key in self.key_press_state.keys():
+            previous_set_long, previous_repeat = self.key_press_state[key]
 
-    def send_key(self, key, set_long=False, repeat=1):
+            del self.key_press_state[key]
+
+            if set_long != previous_set_long:
+                return
+
+            repeat = previous_repeat
+
+        self.send_key(key, set_long, repeat)
+
+    def send_key(self, key, set_long = False, repeat = 1):
+        _info("send_key(%s, %s, %d)"%(key, str(set_long), repeat))
+
         target = self.remote_target
         code = self.remote_code
 

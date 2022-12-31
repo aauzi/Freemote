@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__application__="freemote"
-__description__="A Freebox remote control"
-__version__="0.1"
-__author__="André Auzi"
-__author_email__="aauzi@free.fr"
-__copyright__=u"\u00A9 2018 André Auzi"
-__url__="https://github.com/aauzi/freemote"
+__application__ = "freemote"
+__description__ = "A Freebox remote control"
+__version__ = "0.1"
+__author__ = "André Auzi"
+__author_email__ = "aauzi@free.fr"
+__copyright__ = u"\u00A9 2018 André Auzi"
+__url__ = "https://github.com/aauzi/freemote"
 
 import sys
 import os
@@ -24,16 +24,17 @@ from gi.repository import GLib, Gio, Gdk, Gtk
 try:
     import freemote
     _get_install_path = freemote._get_install_path
-except:
+except Exception:
     def __get_install_path():
         return os.path.dirname(os.path.realpath(__file__))
     _get_install_path = __get_install_path
 
-##-------------------------------------------------------------------
+#####################################################################
 #
 
 _verbose = False
 _quiet = False
+
 
 def _fatal(s):
     """prints the given error message and exits the application.
@@ -45,6 +46,7 @@ def _fatal(s):
     print("Fatal error: %s"%(s), file=sys.stderr, flush=True)
     sys.exit(-1)
 
+
 def _error(s):
     """prints the given error message when quietness is not requested.
 
@@ -54,6 +56,7 @@ def _error(s):
 
     if not _quiet:
         print(s, file=sys.stderr, flush=True)
+
 
 def _warn(s):
     """prints the given warning message when quietness is not requested.
@@ -65,6 +68,7 @@ def _warn(s):
     if not _quiet:
         print(s, file=sys.stderr)
 
+
 def _info(s):
     """prints the given information message when verbosity is requested (and quietness is not).
 
@@ -75,19 +79,23 @@ def _info(s):
     if _verbose and not _quiet:
         print(s, file=sys.stderr)
 
-##-------------------------------------------------------------------
+################################################################
+
 
 def _get_exec_path():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
 
+
 def _get_locale_path():
     return os.path.join(_get_install_path(), "locale")
 
-def _get_resources_path(*arg) :
+
+def _get_resources_path(*arg):
     path = os.path.join(_get_install_path(), "resources")
     for n in arg:
         path = os.path.join(path, n)
     return path
+
 
 def _get_config_path():
     base = None
@@ -96,7 +104,7 @@ def _get_config_path():
     else:
         base = os.path.join(os.path.expanduser('~'), '.config')
     config_path = os.path.join(base, __application__)
-        
+
     _info("config_path: %s"%(config_path))
 
     try:
@@ -104,104 +112,106 @@ def _get_config_path():
     except os.error as e:
         if e.errno != errno.EEXIST:
             _fatal("makedirs(%s) failed with error: %s"%(config_path,
-                                                         os.strerror(errno)))
-                
+                                                         os.strerror(e.errno)))
+
     curdir = os.getcwd()
     try:
         os.chdir(config_path)
     except os.error as e:
         _fatal("chdir(%s) failed with error: %s"%(config_path,
-                                                  os.strerror(errno)))
+                                                  os.strerror(e.errno)))
 
     os.chdir(curdir)
     return config_path
-        
-##-------------------------------------------------------------------
+
+
+###############################################################################
 
 gettext.install(__application__, _get_locale_path())
 
-APP_NAME="Freemote"
-APP_INFO=_("A Freebox remote control")
-APP_VERSION=__version__
-APP_AUTHORS=[u'%s <%s>'%(__author__, __author_email__)]
-APP_COPYRIGHT=__copyright__
+APP_NAME = "Freemote"
+APP_INFO = _("A Freebox remote control")
+APP_VERSION = __version__
+APP_AUTHORS = [u'%s <%s>'%(__author__, __author_email__)]
+APP_COPYRIGHT = __copyright__
 
-_APP_ICON_FILE=_get_resources_path("freemote.png")
-_APP_LOGO_FILE=_get_resources_path("freemote-logo.png")
+_APP_ICON_FILE = _get_resources_path("freemote.png")
+_APP_LOGO_FILE = _get_resources_path("freemote-logo.png")
 
-_CONFIG_FILE_NAME="config.json"
+_CONFIG_FILE_NAME = "config.json"
 
-_VALID_PROTOCOLS=["v5", "revolution"]
-_PROTOCOLS_NAMES={"v5" : _("HD/Cristal"), "revolution": _("Revolution")}
-_DEFAULT_PROTOCOL="v5"
-_DEFAULT_TARGET="hd1.freebox.fr"
+_VALID_PROTOCOLS = ["v5", "revolution"]
+_PROTOCOLS_NAMES = {"v5": _("HD/Cristal"), "revolution": _("Revolution")}
+_DEFAULT_PROTOCOL = "v5"
+_DEFAULT_TARGET = "hd1.freebox.fr"
 
-_TOOLTIP_CONTROL={False: ["home"],
-                  True: ["power", "mute"]}
+_TOOLTIP_CONTROL = {False: ["home"],
+                    True: ["power", "mute"]}
 
-## :data _APP_CSS: styles used by the application
+# :data _APP_CSS: styles used by the application
 # Buttons within the grid named #grid have the remote control grey background
 
-_APP_CSS=b"""
+_APP_CSS = b"""
 #grid button {
   background-color: #685e53;
   background-blend-mode: color;
 }
 """
 
-## :data _KECODE_NAMES: keycodes interpreted as remote keys
+# :data _KECODE_NAMES: keycodes interpreted as remote keys
 # Keyboard inputs are translated in remote control send keys
 
 _KEYCODE_NAMES = {
-    Gdk.KEY_KP_Enter : "ok",
-    Gdk.KEY_KP_Up : "up",
-    Gdk.KEY_KP_Down : "down",
-    Gdk.KEY_KP_Left : "left",
-    Gdk.KEY_KP_Right : "right",
+    Gdk.KEY_KP_Enter: "ok",
+    Gdk.KEY_KP_Up: "up",
+    Gdk.KEY_KP_Down: "down",
+    Gdk.KEY_KP_Left: "left",
+    Gdk.KEY_KP_Right: "right",
 
-    Gdk.KEY_Return : "ok",
-    Gdk.KEY_Up : "up",
-    Gdk.KEY_Down : "down",
-    Gdk.KEY_Left : "left",
-    Gdk.KEY_Right : "right",
+    Gdk.KEY_Return: "ok",
+    Gdk.KEY_Up: "up",
+    Gdk.KEY_Down: "down",
+    Gdk.KEY_Left: "left",
+    Gdk.KEY_Right: "right",
 
-    Gdk.KEY_KP_Page_Up : "prgm_inc",
-    Gdk.KEY_KP_Page_Down : "prgm_dec",
-    Gdk.KEY_KP_Home : "home",
-    
-    Gdk.KEY_Page_Up : "prgm_inc",
-    Gdk.KEY_Page_Down : "prgm_dec",
-    Gdk.KEY_Home : "home",
-    
-    Gdk.KEY_AudioForward : "fwd",
-    Gdk.KEY_AudioRewind : "bwd",
-    Gdk.KEY_AudioMute : "mute",
-    Gdk.KEY_AudioRaiseVolume : "vol_inc",
-    Gdk.KEY_AudioLowerVolume : "vol_dec",
-    Gdk.KEY_AudioRecord : "rec",
-    Gdk.KEY_AudioPlay : "play",
-    Gdk.KEY_AudioPrev : "fwd",
-    Gdk.KEY_AudioNext : "bwd",
+    Gdk.KEY_KP_Page_Up: "prgm_inc",
+    Gdk.KEY_KP_Page_Down: "prgm_dec",
+    Gdk.KEY_KP_Home: "home",
 
-    Gdk.KEY_Forward : "fwd",
-    Gdk.KEY_BackForward : "bwd",
-    Gdk.KEY_s : "mute",
-    Gdk.KEY_m : "mute",
-    Gdk.KEY_KP_Add : "vol_inc",
-    Gdk.KEY_KP_Subtract : "vol_dec",
-    Gdk.KEY_KP_Decimal : "rec",
-    Gdk.KEY_space : "play",
-    Gdk.KEY_p : "bwd",
-    Gdk.KEY_n : "fwd",
+    Gdk.KEY_Page_Up: "prgm_inc",
+    Gdk.KEY_Page_Down: "prgm_dec",
+    Gdk.KEY_Home: "home",
 
-    Gdk.KEY_b : "blue",
-    Gdk.KEY_r : "red",
-    Gdk.KEY_y : "yellow",
-    Gdk.KEY_g : "green",
+    Gdk.KEY_AudioForward: "fwd",
+    Gdk.KEY_AudioRewind: "bwd",
+    Gdk.KEY_AudioMute: "mute",
+    Gdk.KEY_AudioRaiseVolume: "vol_inc",
+    Gdk.KEY_AudioLowerVolume: "vol_dec",
+    Gdk.KEY_AudioRecord: "rec",
+    Gdk.KEY_AudioPlay: "play",
+    Gdk.KEY_AudioPrev: "fwd",
+    Gdk.KEY_AudioNext: "bwd",
 
-    Gdk.KEY_j : "yellow",
-    Gdk.KEY_v : "green"
+    Gdk.KEY_Forward: "fwd",
+    Gdk.KEY_BackForward: "bwd",
+    Gdk.KEY_s: "mute",
+    Gdk.KEY_m: "mute",
+    Gdk.KEY_KP_Add: "vol_inc",
+    Gdk.KEY_KP_Subtract: "vol_dec",
+    Gdk.KEY_KP_Decimal: "rec",
+    Gdk.KEY_space: "play",
+    Gdk.KEY_p: "bwd",
+    Gdk.KEY_n: "fwd",
+
+    Gdk.KEY_b: "blue",
+    Gdk.KEY_r: "red",
+    Gdk.KEY_y: "yellow",
+    Gdk.KEY_g: "green",
+
+    Gdk.KEY_j: "yellow",
+    Gdk.KEY_v: "green"
 }
+
 
 def keyval_name(event):
     """Converts a key release event into a remote control key name.
@@ -221,7 +231,7 @@ def keyval_name(event):
     _info('string: %s'%(event.string))
     return event.string
 
-## :data _MENU_XML: application menu definition
+# :data _MENU_XML: application menu definition
 # The application menu is minimal and shared with the
 # status bar icon popup menu.
 #
@@ -230,7 +240,8 @@ def keyval_name(event):
 # - About
 # - and Quit
 
-_MENU_XML="""
+
+_MENU_XML = """
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="app-menu">
@@ -276,14 +287,14 @@ _MENU_XML="""
            about=_("_About"),
            quit=_("_Quit"))
 
-## :data _SETTINGS_XML: application settings dialog definition
+# :data _SETTINGS_XML: application settings dialog definition
 # The application settings dialog define the configuration parameters
 #
 # The configuration parameters are:
 # - remote_protocol
 # - remote_code
 
-_SETTINGS_XML="""
+_SETTINGS_XML = """
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkDialog" id="app-settings">
@@ -393,24 +404,25 @@ _SETTINGS_XML="""
            remote_code=_("Remote code"),
            start_minimized=_("Start minimized"))
 
+
 class RemoteKeyDefinition:
     __all_keydefs = {}
-    
+
     @staticmethod
     def __register_keydef(keydef):
         RemoteKeyDefinition.__all_keydefs[keydef.name] = keydef
 
     @staticmethod
     def find_keydef(name):
-        if not name in RemoteKeyDefinition.__all_keydefs.keys():
-            return none
+        if name not in RemoteKeyDefinition.__all_keydefs.keys():
+            return None
         return RemoteKeyDefinition.__all_keydefs[name]
-    
-    def __init__(self, label, name = None, file = None):
+
+    def __init__(self, label, name=None, file=None):
         self.label = label
         self.name = name
         self.file = file
-        
+
         if not self.name:
             self.name = self.label.lower()
 
@@ -419,7 +431,8 @@ class RemoteKeyDefinition:
 
         RemoteKeyDefinition.__register_keydef(self)
 
-_ALL_KEYS=[
+
+_ALL_KEYS = [
     RemoteKeyDefinition("Tv"),
     RemoteKeyDefinition("Power"),
 
@@ -457,14 +470,15 @@ _ALL_KEYS=[
     RemoteKeyDefinition("Pause/Play", "play"),
     RemoteKeyDefinition("Forward", "fwd")]
 
+
 class RemoteExecutionContext:
     """Holds the application and command line records for command line operations.
     Relays the command line interface to the commands."""
-    
+
     def __init__(self, app, command_line):
         """stores references to the application and its command line.
         Saves the configuration values that may be affected by command line processing"""
-        
+
         self.app = app
         self.command_line = command_line
         self.verbose = bool(_verbose)
@@ -489,11 +503,11 @@ class RemoteExecutionContext:
     def get_app(self):
         "returns the execution context's application"
         return self.app
-        
+
     def set_exit_status(self, s):
         "sets the command line's exit status"
         self.command_line.set_exit_status(s)
-    
+
     def do_print(self, msg):
         "prints the message in the command line's standard output"
         self.command_line.do_print_literal(self.command_line, msg)
@@ -506,7 +520,7 @@ class RemoteExecutionContext:
         "restores the saved configuration after command processing"
         global _verbose
         global _quiet
-        
+
         if done:
             _verbose = self.verbose
             _quiet = self.quiet
@@ -514,7 +528,7 @@ class RemoteExecutionContext:
             self.app.remote_target = self.remote_target
             self.app.remote_code = self.remote_code
             self.app.start_minimized = self.start_minimized
-            
+
         self.app = None
         self.command_line = None
         return done
@@ -522,32 +536,33 @@ class RemoteExecutionContext:
     def execute(self):
         """executes the command processing.
         returns False if nothing was processed, True otherwise."""
-        
+
         argv = self.get_arguments()
         if len(argv) <= 1:
             return self.epilogue(False)
-        
+
         command = RemoteCommand.find_command(argv[1])
         if not command:
             self.execute_error('%s: unknown command'%(argv[1]), argv[1:])
             return self.epilogue(True)
-        
+
         command.prologue(self)
         try:
-            thread = threading.Thread(target = command.execute,
-                                      args = (argv[1:],))
+            thread = threading.Thread(target=command.execute,
+                                      args=(argv[1:],))
             thread.start()
             thread.join()
         except Exception as e:
             command.execute_error(e, argv[1:])
         command.epilogue()
-        
+
         return self.epilogue(True)
 
     def execute_error(self, e, argv):
         "prints an execution error message"
         self.do_printerr("%s, for %s\n"%(e, str(argv)))
-    
+
+
 class RemoteCommand:
     """Holds the commands description and execution."""
 
@@ -564,7 +579,7 @@ class RemoteCommand:
         groups = []
         for c in RemoteCommand.__all_commands.values():
             groups.append(c.get_option_group())
-            
+
         return groups
 
     @staticmethod
@@ -578,9 +593,9 @@ class RemoteCommand:
     @staticmethod
     def find_command(name):
         "returns the requested command"
-        if not name in RemoteCommand.__all_commands.keys():
+        if name not in RemoteCommand.__all_commands.keys():
             return None
-        
+
         return RemoteCommand.__all_commands[name]
 
     @staticmethod
@@ -588,7 +603,7 @@ class RemoteCommand:
         "returns the commands collection"
         return RemoteCommand.__all_commands
 
-    def __init__(self, name, summary = None, description = None, help_description = None):
+    def __init__(self, name, summary=None, description=None, help_description=None):
         self.name = name
         self.summary = summary
         self.description = description
@@ -597,70 +612,64 @@ class RemoteCommand:
         self.option_group = GLib.OptionGroup(name, description, help_description, None)
         self.option_entries = []
 
-        #self.option_context.set_summary(summary)
-        #self.option_context.set_description(description)
-        #self.option_context.add_group(self.option_group)
-        
+        # self.option_context.set_summary(summary)
+        # self.option_context.set_description(description)
+        # self.option_context.add_group(self.option_group)
+
         RemoteCommand.__register_command(self)
 
     def get_name(self):
         "returns the command's name"
         return self.name
-        
+
     def get_summary(self):
         "returns the command's help summary"
-        #self.option_context.get_summary()
+        # self.option_context.get_summary()
         return self.summary
-        
-    def get_help(self, main_help = True, group = None):
+
+    def get_help(self, main_help=True, group=None):
         "returns the command's help information"
-        #self.option_context.get_help(main_help, group)
+        # self.option_context.get_help(main_help, group)
         help = 'Usage:\n'
         help += '\t%s [OPTION...]'%(self.name)
-        
+
         if self.summary:
             help += ' - ' + self.summary
 
         help += '\n'
-        
+
         if self.description:
-            help += '\n' + self.description +' \n'
-            
+            help += '\n' + self.description + ' \n'
+
         if len(self.option_entries):
             help += '\nOptions:\n'
-            
-            one_short_name = False
+
             lmax = 0
             for e in self.option_entries:
-                l = len(e.long_name)
+                el = len(e.long_name)
                 if e.arg_description:
-                    l +=len("=")+len(e.arg_description)
-                if l > lmax:
-                    lmax = l
+                    el += len("=") + len(e.arg_description)
+
                 if e.short_name:
-                    one_short_name = True
-                    
-                    
-            if one_short_name:
-                lmax += len(' -c, --:')
-            else:
-                lmax += len(' --:')
-                
-            align = '{:>%d}'%(lmax)
-            for e in self.option_entries:
-                description =e.long_name;
-                if e.arg_description:
-                    description += '='+e.arg_description
-                    
-                if e.short_name:
-                    text = align.format('-%c, --%s: '%(e.short_name, description))
+                    lmax = max(lmax, len('-x, --') + el)
                 else:
-                    text = align.format('--%s: '%(e.long_name))
+                    lmax = max(lmax, len('--') + el)
+
+            align = '{:>%d}: '%(lmax)
+            for e in self.option_entries:
+                description = e.long_name
+                if e.arg_description:
+                    description += '=' + e.arg_description
+
+                if e.short_name:
+                    text = align.format('-%c, --%s'%(e.short_name, description))
+                else:
+                    text = align.format('--%s'%(description))
                 help += text + e.description + '\n'
-                
+
         if self.help_description:
-            help += '\n' + self.help_description  + '\n'
-            
+            help += '\n' + self.help_description + '\n'
+
         return help
 
     def get_option_group(self):
@@ -668,14 +677,14 @@ class RemoteCommand:
         if len(self.option_entries):
             self.option_group.add_entries(self.option_entries)
             self.option_entries = []
-            
+
         return self.option_group
 
     def get_option_entries(self):
         "returns the command's definition option entries"
         return self.option_entries
 
-    def add_main_option(self, long_name, short_name, flags, arg, description, arg_description = None):
+    def add_main_option(self, long_name, short_name, flags, arg, description, arg_description=None):
         "adds an option entry to the command definition"
         entry = GLib.OptionEntry()
         entry.long_name = long_name
@@ -685,9 +694,9 @@ class RemoteCommand:
         entry.description = description
         entry.arg_description = arg_description
         entry.arg_data = None
-        
+
         self.option_entries.append(entry)
-        
+
     def prologue(self, context):
         "initializes the command with an execution context"
         self.execute_context = context
@@ -703,37 +712,37 @@ class RemoteCommand:
         self.status = self.do_exec(argv)
         if self.status is None:
             self.status = 0
-        
+
     def do_exec(self, argv):
         "performs the command's actions"
         pass
 
     def execute_error(self, e, argv):
         "prints an execution error message"
-        self.execute_context.execute_error("%s: exec error: %s"%(self.name, str(e), str(argv)))
+        self.execute_context.execute_error("%s: exec error: %s %s"%(self.name, str(e), str(argv)))
         self.status = -1
-    
+
     def get_app(self):
         "returns the execution context's application"
         return self.execute_context.get_app()
-        
+
     def get_context(self):
         "returns the execution context"
         return self.execute_context
-        
+
     def get_arguments(self):
         "returns the execution context's arguments"
         argv = self.execute_context.get_arguments()[1:]
         return argv[1:]
-        
+
     def get_options_dict(self):
         "returns the execution context's options dictionnary"
         return self.execute_context.get_options_dict()
-        
+
     def set_exit_status(self, s):
         "sets the execution context's exit status"
         self.execute_context.set_exit_status(s)
-    
+
     def do_print(self, msg):
         "prints the message in the execution context's standard output"
         self.execute_context.do_print(msg)
@@ -741,6 +750,7 @@ class RemoteCommand:
     def do_printerr(self, msg):
         "prints the message in the execution context's standard error output"
         self.execute_context.do_printerr(msg)
+
 
 class HelpCommand(RemoteCommand):
     def __init__(self):
@@ -752,40 +762,39 @@ class HelpCommand(RemoteCommand):
 
     def print_all_commands(self):
         lst = sorted(self.all_commands().keys())
-        
+
         lmax = 0
         for name in lst:
-            l = len(name)
-            if l > lmax:
-                lmax = l
+            lmax = max(lmax, len(name))
 
-        align = '{:>%d}'%(lmax+len(' :'))
+        align = '{:>%d}:'%(lmax)
         for name in lst:
             command = self.all_commands()[name]
-            
-            text = align.format('%s:'%(name))
+
+            text = align.format(name)
             summary = command.get_summary()
             if summary:
                 text += ' ' + summary
             text += '\n'
             self.do_print(text)
-    
+
     def print_command(self, name):
         command = self.all_commands()[name]
         self.do_print(command.get_help())
-        
+
     def do_exec(self, argv):
         if len(argv) == 1:
             self.print_all_commands()
         else:
             name = argv[1]
-            if not name in self.all_commands().keys():
+            if name not in self.all_commands().keys():
                 self.do_printerr("command %s unknown\n"%(name))
                 return -1
             else:
                 self.print_command(name)
-        #return 0
-        
+        # return 0
+
+
 class ListConfigCommand(RemoteCommand):
     def __init__(self):
         super().__init__("list-config", _("list the configuration"))
@@ -793,14 +802,14 @@ class ListConfigCommand(RemoteCommand):
     def do_exec(self, argv):
         lmax = 0
         for name in self.get_app().config.keys():
-            l = len(name)
-            if l > lmax:
-                lmax = l
-        align = '{:>%d}'%(lmax+len(' '))
+            lmax = max(lmax, len(name))
+
+        align = '{:>%d}'%(lmax + len(' '))
         for name, value in self.get_app().config.items():
             self.do_print(align.format(name) + ': ' + str(value) + '\n')
-        #return 0
-        
+        # return 0
+
+
 class SetConfigCommand(RemoteCommand):
     def __init__(self):
         super().__init__("set-config", _("change the configurations"))
@@ -808,8 +817,9 @@ class SetConfigCommand(RemoteCommand):
     def do_exec(self, argv):
         self.get_app()._save_config()
         self.get_context()._save_config()
-        #return 0
-        
+        # return 0
+
+
 class ListKeysCommand(RemoteCommand):
     def __init__(self):
         super().__init__("list-keys", _("list the managed keys"))
@@ -817,23 +827,24 @@ class ListKeysCommand(RemoteCommand):
     @staticmethod
     def get_name(key):
         return key.name
-        
+
     def do_exec(self, argv):
         for k in sorted(_ALL_KEYS, key=ListKeysCommand.get_name):
             self.do_print("%s\n"%(k.name))
-        #return 0
-        
+        # return 0
+
+
 class SendKeyCommand(RemoteCommand):
     def __init__(self):
         super().__init__("send-key", _("send a key"),
                          _("Send a given key to the Freebox with optional 'long pressed' or 'repeat' modifiers"))
         self.add_main_option("long", ord("l"),
-                             #FIXME: GLib.OptionFlags.OPTIONAL_ARG,
+                             # FIXME: GLib.OptionFlags.OPTIONAL_ARG,
                              GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _("send a long key press"), None)
         self.add_main_option("repeat", ord("r"),
-                             #FIXME: GLib.OptionFlags.OPTIONAL_ARG,
+                             # FIXME: GLib.OptionFlags.OPTIONAL_ARG,
                              GLib.OptionFlags.NONE,
                              GLib.OptionArg.INT,
                              _("repeat the key press"), str(1))
@@ -848,6 +859,7 @@ class SendKeyCommand(RemoteCommand):
             repeat = options.lookup_value('repeat').get_int32()
         return self.get_app().send_key(argv[1], long_press, repeat)
 
+
 _ALL_COMMANDS = [
     HelpCommand(),
     ListConfigCommand(),
@@ -855,12 +867,13 @@ _ALL_COMMANDS = [
     ListKeysCommand(),
     SendKeyCommand()]
 
+
 class RemoteApp(Gtk.Application):
     def __init__(self, *args, **kwargs):
         super().__init__(*args,
                          application_id="org.aauzi.freemote",
                          flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE, **kwargs)
-        
+
         self.add_main_option("verbose", ord("v"),
                              GLib.OptionFlags.IN_MAIN,
                              GLib.OptionArg.NONE,
@@ -880,12 +893,12 @@ class RemoteApp(Gtk.Application):
                              GLib.OptionFlags.IN_MAIN,
                              GLib.OptionArg.STRING,
                              _("Remote protocol\n\tAccording Freebox type (any of: %s)")%(", ").join(_VALID_PROTOCOLS), _DEFAULT_PROTOCOL)
-        
+
         self.add_main_option("remote-target", ord("t"),
                              GLib.OptionFlags.IN_MAIN,
                              GLib.OptionArg.STRING,
                              _("Freebox address\n\tFormat: hd[n].freebox.fr where <n> is within [1..2]"), _DEFAULT_TARGET)
-        
+
         self.add_main_option("remote-code", ord("c"),
                              GLib.OptionFlags.IN_MAIN,
                              GLib.OptionArg.STRING,
@@ -895,11 +908,11 @@ class RemoteApp(Gtk.Application):
         # if len(groups):
         #     for group in groups:
         #         self.add_option_group(group)
-            
+
         entries = RemoteCommand.get_all_option_entries()
         if len(entries):
             self.add_main_option_entries(entries)
-                             
+
         self.window = None
         self.icon = None
         self.remote_protocol = _DEFAULT_PROTOCOL
@@ -910,17 +923,17 @@ class RemoteApp(Gtk.Application):
         self.keymap = dict()
         self.config = None
         self.options = set()
-        
+
         self._load_config()
-        
+
     def do_startup(self):
         """When the application is started,
-        
-        the application menu actions, style provider 
+
+        the application menu actions, style provider
         and status bar icon are initialized."""
 
         _info("application: do startup")
-        
+
         Gtk.Application.do_startup(self)
 
         action = Gio.SimpleAction.new("about", None)
@@ -945,9 +958,9 @@ class RemoteApp(Gtk.Application):
         self.add_action(action)
 
         self.icon_menu = Gtk.Menu.new_from_model(builder.get_object("icon-menu"))
-        
-        #self.notif = Gio.Notification.new(APP_NAME)
-        #self.send_notification(None, self.notif)
+
+        # self.notif = Gio.Notification.new(APP_NAME)
+        # self.send_notification(None, self.notif)
 
     def do_status_icon_activate(self, status):
         """When the status icon is activated,
@@ -957,45 +970,45 @@ class RemoteApp(Gtk.Application):
         if not self.window:
             _warn("status icon: activate without application window")
             return
-        
+
         _info("status icon: activate")
-        
+
         if self.window.is_active():
             self.window.iconify()
         else:
             self.window.present()
-        
+
     def do_status_icon_popup_menu(self, status, button, activate_time):
         """When the status icon popup menu is activated,
 
         the application menu is shown."""
-        
+
         if not self.window:
             _warn("status icon: popup menu without application  window")
             return
-        
+
         _info("status icon: popup menu")
-        
+
         self.icon_menu.popup(None, None, None, None, button, activate_time)
-        
+
     def do_activate(self):
         """When the application is activated,
 
         the application window is created if necessary and presented."""
 
         _info("application: activate")
-        
+
         if not self.icon:
             self.build_status_icon()
-            
+
         if not self.window:
             self.build_window()
-            
+
         if not self.start_minimized:
             self.window.present()
         else:
             self.window.iconify()
-                             
+
     def do_command_line(self, command_line):
         """When the command line is processed,
 
@@ -1005,7 +1018,7 @@ class RemoteApp(Gtk.Application):
         global _quiet
 
         context = RemoteExecutionContext(self, command_line)
-        
+
         options = command_line.get_options_dict()
 
         if options.contains("verbose"):
@@ -1013,15 +1026,15 @@ class RemoteApp(Gtk.Application):
 
         if options.contains("quiet"):
             _quiet = True
-        
+
         _info("application: do command line(remote=%s)"%(command_line.get_is_remote()))
-        
+
         if options.contains("remote-protocol"):
             value = options.lookup_value("remote-protocol")
             protocol = value.get_string()
- 
+
             _info("remote-protocol=[%s] argument recieved"%(protocol))
-            if not protocol in _VALID_PROTOCOLS:
+            if protocol not in _VALID_PROTOCOLS:
                 _warn("ignored unknown protocol [%s]"%(protocol))
             elif not self.remote_protocol or self.remote_protocol != protocol:
                 self.remote_protocol = protocol
@@ -1030,7 +1043,7 @@ class RemoteApp(Gtk.Application):
         if options.contains("remote-target"):
             value = options.lookup_value("remote-target")
             target = value.get_string()
- 
+
             _info("remote-target=[%s] argument recieved"%(target))
             if not self.remote_target and self.remote_target != target:
                 self.remote_target = target
@@ -1054,13 +1067,13 @@ class RemoteApp(Gtk.Application):
 
         if not context.execute():
             self.activate()
-            
+
         _info("application: command line done")
         return 0
 
     def _on_about(self, action, param):
         _info("about dialog: create")
-        
+
         about_dialog = Gtk.AboutDialog(transient_for=self.window, modal=True)
 
         about_dialog.set_program_name(APP_NAME)
@@ -1071,10 +1084,10 @@ class RemoteApp(Gtk.Application):
 
         pixbuf = gi.repository.GdkPixbuf.Pixbuf.new_from_file(_APP_LOGO_FILE)
         about_dialog.set_logo(pixbuf)
-        
+
         about_dialog.run()
         about_dialog.close()
-        
+
     def _on_quit(self, action, param):
         _info("application: quit")
         self.quit()
@@ -1087,26 +1100,26 @@ class RemoteApp(Gtk.Application):
         settings_dialog = builder.get_object("app-settings")
         settings_dialog.set_transient_for(self.window)
         settings_dialog.show_all()
-        
+
         combo = builder.get_object('remote_protocol')
         for p in _VALID_PROTOCOLS:
             combo.append(p, _PROTOCOLS_NAMES[p])
-        
+
         target_entry = builder.get_object('remote_target')
         code_entry = builder.get_object('remote_code')
         minimized_entry = builder.get_object('start_minimized')
-        
+
         if self.remote_protocol:
             combo.set_active_id(self.remote_protocol)
-            
+
         if self.remote_target:
             target_entry.set_text(self.remote_target)
-        
+
         if self.remote_code:
             code_entry.set_text(self.remote_code)
 
         minimized_entry.set_active(self.start_minimized)
-            
+
         response = settings_dialog.run()
         if response == Gtk.ResponseType.OK:
             need_config_save = False
@@ -1116,7 +1129,7 @@ class RemoteApp(Gtk.Application):
                 if not self.remote_protocol or self.remote_protocol != protocol:
                     self.remote_protocol = protocol
                     need_config_save = True
-                
+
             target = target_entry.get_text()
             if target and len(target):
                 _info("target: %s configuration selected"%(target))
@@ -1139,34 +1152,34 @@ class RemoteApp(Gtk.Application):
 
             if need_config_save:
                 self._save_config()
-        
+
         settings_dialog.close()
-                             
+
     def _get_config_path(self):
         if self.config_path:
             return self.config_path
 
         self.config_path = _get_config_path()
         return self.config_path
-                             
+
     def _load_config(self):
         _info("application: load config")
-        
+
         config = None
         try:
             config_path = self._get_config_path()
             f = open(os.path.join(config_path, _CONFIG_FILE_NAME), "r")
             config = json.load(f)
             f.close()
-        
+
             if "protocol" in config.keys():
                 protocol = config["protocol"]
-                
-                if not protocol in _VALID_PROTOCOLS:
+
+                if protocol not in _VALID_PROTOCOLS:
                     _warn("ignored unknown protocol [%s]"%(protocol))
                 else:
                     self.remote_protocol = protocol
-                
+
             if "target" in config.keys():
                 self.remote_target = config["target"]
 
@@ -1179,7 +1192,7 @@ class RemoteApp(Gtk.Application):
             self.config = config
         except Exception as e:
             _warn("load_config exception %s"%(str(e)))
-        
+
     def _save_config(self):
         _info("application: save config")
 
@@ -1198,7 +1211,7 @@ class RemoteApp(Gtk.Application):
             f = open(os.path.join(config_path, _CONFIG_FILE_NAME), "w")
             json.dump(self.config, f, indent=2)
             f.close()
-        except Exception as e:
+        except Exception:
             pass
 
     def build_button(self, name):
@@ -1211,29 +1224,29 @@ class RemoteApp(Gtk.Application):
            A remote control button.
 
         A built button is inserted in the application's keymap dictionnary."""
-        
+
         _info("build button: %s"%(name))
 
         key_def = RemoteKeyDefinition.find_keydef(name)
         if not key_def:
             _fatal("build_button: invalid keydef name %s"%(name))
-            
+
         button = Gtk.Button(label=None)
 
         label = key_def.label
         file = key_def.file
-            
+
         png = _get_resources_path(file)
-        
+
         if os.path.exists(png):
             image = Gtk.Image.new_from_file(png)
             button.set_image(image)
-            
+
             need_tooltip_text = False
-            
+
             if name != label.lower():
                 need_tooltip_text = True
-            
+
             if not need_tooltip_text and name in _TOOLTIP_CONTROL[True]:
                 need_tooltip_text = True
             elif need_tooltip_text and name in _TOOLTIP_CONTROL[False]:
@@ -1245,9 +1258,9 @@ class RemoteApp(Gtk.Application):
             button.set_label(label)
 
         button.set_name(name)
-        
+
         button.connect('clicked', self.on_button_clicked)
-        
+
         self.keymap[name] = button
         return button
 
@@ -1255,9 +1268,9 @@ class RemoteApp(Gtk.Application):
         """When a button is clicked,
 
         a remote control key named by the button's name is sent."""
-        
+
         _info("button clicked: %s"%(widget.get_name()))
-        
+
         self.send_key_clicked(widget.get_name())
 
     def build_status_icon(self):
@@ -1267,33 +1280,33 @@ class RemoteApp(Gtk.Application):
         icon.set_title(APP_NAME)
         icon.set_tooltip_text(APP_INFO)
         icon.set_visible(True)
-        
+
         icon.connect("activate", self.do_status_icon_activate)
         icon.connect("popup_menu", self.do_status_icon_popup_menu)
 
         self.icon = icon
-        
+
     def build_window(self):
         _info("build window")
-        
+
         provider = Gtk.CssProvider()
         provider.load_from_data(_APP_CSS)
-        
+
         Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
                                                  provider,
                                                  Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        
+
         window = Gtk.ApplicationWindow(application=self)
         window.set_icon_from_file(_APP_ICON_FILE)
-        
+
         header_bar = Gtk.HeaderBar.new()
         header_bar.set_has_subtitle(False)
         header_bar.set_decoration_layout("menu:minimize,close")
         header_bar.set_show_close_button(True)
         header_bar.show()
-        
+
         window.set_titlebar(header_bar)
-        
+
         grid = self.build_grid()
         window.add(grid)
 
@@ -1301,26 +1314,26 @@ class RemoteApp(Gtk.Application):
 
         window.connect('key-press-event', self.key_press_event)
         window.connect('realize', self._grid_realize)
-        
+
         self.icon_menu.attach_to_widget(window)
 
         self.window = window
-        
+
     def build_grid(self):
         """Build the application's remote control buttons grid.
 
         :returns:
-            A Gtk.Grid with the remote control buttons attached. 
+            A Gtk.Grid with the remote control buttons attached.
         """
-        
+
         _info("build grid")
-        
+
         grid = Gtk.Grid()
         grid.set_name("grid")
-        
+
         btnTv = self.build_button("tv")
         btnPower = self.build_button("power")
-        
+
         btn1 = self.build_button("1")
         btn2 = self.build_button("2")
         btn3 = self.build_button("3")
@@ -1331,7 +1344,7 @@ class RemoteApp(Gtk.Application):
         btn8 = self.build_button("8")
         btn9 = self.build_button("9")
         btn0 = self.build_button("0")
-        
+
         btnRed = self.build_button("red")
         btnUp = self.build_button("up")
         btnBlue = self.build_button("blue")
@@ -1354,12 +1367,12 @@ class RemoteApp(Gtk.Application):
         btnBackward = self.build_button("bwd")
         btnPausePlay = self.build_button("play")
         btnForward = self.build_button("fwd")
-        
+
         grid.add(btnTv)
         grid.attach_next_to(btnPower, btnTv, Gtk.PositionType.RIGHT, 1, 1)
         grid.insert_column(1)
         grid.attach_next_to(btn1, btnTv, Gtk.PositionType.BOTTOM, 1, 1)
-        
+
         grid.attach_next_to(btn2, btn1, Gtk.PositionType.RIGHT, 1, 1)
         grid.attach_next_to(btn3, btn2, Gtk.PositionType.RIGHT, 1, 1)
         grid.attach_next_to(btn4, btn1, Gtk.PositionType.BOTTOM, 1, 1)
@@ -1390,13 +1403,13 @@ class RemoteApp(Gtk.Application):
         grid.attach_next_to(btnBackward, btnVolDec, Gtk.PositionType.BOTTOM, 1, 1)
         grid.attach_next_to(btnPausePlay, btnBackward, Gtk.PositionType.RIGHT, 1, 1)
         grid.attach_next_to(btnForward, btnPausePlay, Gtk.PositionType.RIGHT, 1, 1)
-        
+
         grid.insert_row(4)
         grid.attach_next_to(btn0, btn8, Gtk.PositionType.BOTTOM, 1, 1)
 
         grid.set_halign(Gtk.Align.CENTER)
         grid.set_valign(Gtk.Align.CENTER)
-        
+
         return grid
 
     def _grid_realize(self, widget):
@@ -1405,21 +1418,21 @@ class RemoteApp(Gtk.Application):
 
     def key_press_event(self, widget, event):
         """When a key is pressed,
-        
-        the _KEYCODE_NAMES table and the application's keymap 
-        dictionnnary are used to produce a remote control key 
+
+        the _KEYCODE_NAMES table and the application's keymap
+        dictionnnary are used to produce a remote control key
         button's activation."""
-        
+
         name = keyval_name(event)
-        if not name in self.keymap.keys():
+        if name not in self.keymap.keys():
             _info("unknown key press: %d(%s)"%(event.keyval, event.string))
             return False
-        
+
         _info("key press: %s"%(name))
         button = self.keymap[name]
         button.emit("activate")
         return True
-                             
+
     def send_key_clicked(self, key):
         """Send the given remote control key to the configured freebox.
 
@@ -1431,12 +1444,12 @@ class RemoteApp(Gtk.Application):
         When the remote control code is empty,
         opens a message dialog box and stop sending.
 
-        When the Ctrl+ modifier is active, 
+        When the Ctrl+ modifier is active,
         sends a long remote control key event."""
-        
+
         if not self.remote_code:
             _error("remote code missing")
-            
+
             message = Gtk.MessageDialog(transient_for=self.window, modal=True,
                                         buttons=Gtk.ButtonsType.CLOSE)
             message.set_markup(_("<i>Remote code</i> is missing."))
@@ -1447,7 +1460,7 @@ class RemoteApp(Gtk.Application):
 
         if not self.remote_target:
             _error("remote target missing")
-            
+
             message = Gtk.MessageDialog(transient_for=self.window, modal=True,
                                         buttons=Gtk.ButtonsType.CLOSE)
             message.set_markup(_("<i>Freebox address</i> is missing."))
@@ -1457,31 +1470,32 @@ class RemoteApp(Gtk.Application):
             return
 
         _info("send key: %s"%(key))
-        
+
         modifiers_state = Gdk.Keymap.get_default().get_modifier_state()
 
         set_long = False
         if modifiers_state & Gdk.ModifierType.CONTROL_MASK:
             set_long = True
-            
+
         self.send_key(key, set_long)
-            
-    def send_key(self, key, set_long = False, repeat = 1):
+
+    def send_key(self, key, set_long=False, repeat=1):
         target = self.remote_target
         code = self.remote_code
 
         long_str = ''
         if set_long:
-            long_str="&long=true"
+            long_str = "&long=true"
 
         repeat_str = ''
         if repeat > 1:
-            repeat_str="&repeat=%d"%(repeat)
+            repeat_str = "&repeat=%d"%(repeat)
 
-        url = "http://%s/pub/remote_control?code=%s&key=%s%s%s"%(target, code,
-                                                                     key,
-                                                                     long_str,
-                                                                     repeat_str)
+        url = "http://%s/pub/remote_control?code=%s&key=%s%s%s"%(target,
+                                                                 code,
+                                                                 key,
+                                                                 long_str,
+                                                                 repeat_str)
         exit_status = 0
         try:
             response = requests.get(url, timeout=1)
@@ -1496,7 +1510,8 @@ class RemoteApp(Gtk.Application):
         finally:
             pass
         return exit_status
-       
+
+
 if __name__ == '__main__':
     app = RemoteApp()
     app.run(sys.argv)

@@ -1515,7 +1515,7 @@ class RemoteApp(Gtk.Application):
 
         self.send_key(key, set_long, repeat)
 
-    def send_key(self, key, set_long = False, repeat = 1):
+    def send_key(self, key, set_long=False, repeat=1):
         _info("send_key(%s, %s, %d)"%(key, str(set_long), repeat))
 
         target = self.remote_target
